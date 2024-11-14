@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewData["Title"] = "Predict2";
+    Layout = "~/Views/Shared/_ContLayout.cshtml";
+}
+
+@section heading {
+    Predict result
+}
+<h1>Predict</h1>
+<h2>Single File Upload</h2>
+<hr />
+<div class="row">
+    <div class="col-md-12">
+        <form method="post" asp-controller="Home" asp-action="Predict2"
+              enctype="multipart/form-data">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <input type="file" name="fileUpload" class="form-control" />
+            <button type="submit" name="Upload" class="btn btn-primary">Upload</button>
+        </form>
+    </div>
+</div>
+<hr />
+
+<h3>Predict result: </h3>
+@ViewBag.Result

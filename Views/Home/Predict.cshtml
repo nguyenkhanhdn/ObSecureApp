@@ -1,0 +1,49 @@
+﻿
+@{
+    ViewData["Title"] = "Predict";
+    Layout = "~/Views/Shared/_ContLayout.cshtml";
+}
+
+@section heading{
+    Predict result
+}
+
+@section commentForm{
+    <!-- Comment Form Section -->
+    <section id="comment-form" class="comment-form section">
+        <div class="container">
+
+            <form asp-action="comment" method="post" asp-controller="Home">
+
+                <h4>Post Comment</h4>
+                <p>Your email address will not be published. Required fields are marked * </p>
+                <div class="row">
+                    <div class="col-md-6 form-group">
+                        <input name="name" type="text" class="form-control" placeholder="Your Name*">
+                    </div>
+                    <div class="col-md-6 form-group">
+                        <input name="email" type="text" class="form-control" placeholder="Your Email*">
+                    </div>
+                </div>
+                
+                <div class="row">
+                    <div class="col form-group">
+                        <textarea name="comment" class="form-control" placeholder="Your Comment*"></textarea>
+                    </div>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary">Post Comment</button>
+                </div>
+
+            </form>
+
+        </div>
+    </section><!-- /Comment Form Section -->
+}
+<h1>Predict</h1>
+
+<hr/>
+
+<h3>Predict result: </h3>
+@ViewBag.Result
