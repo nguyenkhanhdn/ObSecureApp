@@ -82,7 +82,7 @@
   "TrainingOption": {
     "Version": 1,
     "Type": "TextClassficationTrainingOption",
-    "TrainingTime": 10,
+    "TrainingTime": 2147483647,
     "LabelColumn": "label",
     "TextColumn": "comment",
     "ValidationOption": {

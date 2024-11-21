@@ -48,18 +48,24 @@
 <h3>Kết quả chẩn đoán: </h3>
 @if (@ViewBag.Label != null)
 {
-    <strong style="color:red;">
-        Label: Thông tin dung tục, bạo lực, ...
-    </strong>
+    @if(ViewBag.Label){
+        <strong style="color:red;">
+            Label: @ViewBag.Label
+        </strong>
+    }
+    else
+    {
+        <strong style="color:green;">
+            Label: @ViewBag.Label
+        </strong>
+    }
     <br />
     <strong>
-        Score: @ViewBag.Score
+        Score: @ViewBag.Probability
     </strong>
     <br />
-}else
-{
+}else{
     <strong style="color:black;">
         Dữ liệu an toàn.
-    </strong>
-   
+    </strong>   
 }

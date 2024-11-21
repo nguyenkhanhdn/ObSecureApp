@@ -19,6 +19,13 @@ namespace ObSecureApp.Controllers
         {
             return View();
         }
+        public IActionResult Train()
+        {
+            SentimentML sentimentML = new SentimentML();
+            sentimentML.TrainingModel();
+
+            return View();
+        }
 
         [HttpGet]
         public IActionResult Predict()
@@ -38,34 +45,46 @@ namespace ObSecureApp.Controllers
         [HttpPost]
         public IActionResult Predict(string name, string email, string comment)
         {
+            SentimentML sentimentML= new SentimentML();
 
-            var sampleData = new MLModel.ModelInput()
-            {
-                Comment = comment
-            };
-
-            //Load model and predict output
-            //var result = MLModel.Predict(sampleData);
-            PredictResult result = new PredictResult();
-
-            var sortedScoresWithLabel = MLModel.PredictAllLabels(sampleData);
-            //MLModel.ModelOutput sortedScoresWithLabel = MLModel.Predict(sampleData);
-        
-            foreach (var score in sortedScoresWithLabel)
-            {
-                if (score.Value >= 0.35)
-                {
-                    result.Score = score.Value;
-                    result.Label = score.Key;
-                }
-                break;
-            }
-                        
-            ViewBag.Label = result.Label;
-            ViewBag.Score = result.Score;
+            SentimentPrediction sentimentPrediction = sentimentML.Predict(comment);
+             
+            ViewBag.Label = sentimentPrediction.Prediction;
+            ViewBag.Probability = sentimentPrediction.Probability;
 
             return View();
         }
+        //[HttpPost]
+        //public IActionResult Predict(string name, string email, string comment)
+        //{
+
+        //    var sampleData = new MLModel.ModelInput()
+        //    {
+        //        Comment = comment
+        //    };
+
+        //    //Load model and predict output
+        //    //var result = MLModel.Predict(sampleData);
+        //    PredictResult result = new PredictResult();
+
+        //    var sortedScoresWithLabel = MLModel.PredictAllLabels(sampleData);
+        //    //MLModel.ModelOutput sortedScoresWithLabel = MLModel.Predict(sampleData);
+
+        //    foreach (var score in sortedScoresWithLabel)
+        //    {
+        //        if (score.Value >= 0.35)
+        //        {
+        //            result.Score = score.Value;
+        //            result.Label = score.Key;
+        //        }
+        //        break;
+        //    }
+
+        //    ViewBag.Label = result.Label;
+        //    ViewBag.Score = result.Score;
+
+        //    return View();
+        //}
         [HttpGet]
         public IActionResult Predict2()
         {
