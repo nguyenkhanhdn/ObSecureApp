@@ -39,21 +39,6 @@ namespace ObSecureApp.Controllers
         {
 
             //Load sample data
-            var sampleData = new ObSecureMLModel.ModelInput()
-            {
-                Comment = @"The other two films Hitch and Magnolia are also directly related to the community in question, and may be of interest to those who see those films.  So why not link to them?",
-            };
-
-            //Load model and predict output
-            var result = ObSecureMLModel.Predict(sampleData);
-            ViewBag.Result = result.PredictedLabel.ToString() + result.Label + result.Score.ToString();
-            return View();
-        }
-        [HttpGet]
-        public IActionResult Predict2()
-        {
-
-            ////Load sample data
             //var sampleData = new ObSecureMLModel.ModelInput()
             //{
             //    Comment = @"The other two films Hitch and Magnolia are also directly related to the community in question, and may be of interest to those who see those films.  So why not link to them?",
@@ -64,6 +49,11 @@ namespace ObSecureApp.Controllers
             //ViewBag.Result = result.PredictedLabel.ToString() + result.Label + result.Score.ToString();
             return View();
         }
+        [HttpGet]
+        public IActionResult Predict2()
+        {
+            return View();
+        }
         [HttpPost]
         public async Task<IActionResult> Predict2(IFormFile fileUpload)
         {
@@ -71,7 +61,10 @@ namespace ObSecureApp.Controllers
             {
                 if (fileUpload != null && fileUpload.Length > 0)
                 {
-                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", fileUpload.FileName);
+                    var fileext = Path.GetExtension(fileUpload.FileName);
+                    var myUniqueFileName = Guid.NewGuid() +  fileext;
+
+                    var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/uploads", myUniqueFileName);
                     //Using Buffering
                     using (var stream = System.IO.File.Create(filePath))
                     {
@@ -87,17 +80,31 @@ namespace ObSecureApp.Controllers
                     // Process the file here (e.g., save to the database, storage, etc.)
 
                     
-
                     // Create single instance of sample data from first line of dataset for model input
                     var imageBytes = System.IO.File.ReadAllBytes(filePath);
-                    ObSecureMLModel2.ModelInput sampleData = new ObSecureMLModel2.ModelInput()
+                    ImgMLModel.ModelInput sampleData = new ImgMLModel.ModelInput()
                     {
                         ImageSource = imageBytes,
                     };
 
                     // Make a single prediction on the sample data and print results.
-                    var sortedScoresWithLabel = ObSecureMLModel2.Predict(sampleData);
-                    ViewBag.Result = sortedScoresWithLabel.PredictedLabel.ToString() + sortedScoresWithLabel.Label + sortedScoresWithLabel.Score.ToString();
+                    //var sortedScoresWithLabel = ImgMLModel.Predict(sampleData);
+                    var sortedScoresWithLabel = ImgMLModel.PredictAllLabels(sampleData);
+
+                    PredictResult result = new PredictResult();
+
+                    foreach (var score in sortedScoresWithLabel)
+                    {
+                        if (score.Value >= 0.45)
+                        {
+                            result.Score = score.Value;
+                            result.Label = score.Key;
+                        }
+                        break;
+                    }
+
+
+                    ViewBag.Result = result;
                     return View();
                 }
             }

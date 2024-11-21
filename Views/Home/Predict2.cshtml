@@ -1,14 +1,14 @@
-﻿
+﻿@using ObSecureApp.Controllers;
+
 @{
     ViewData["Title"] = "Predict2";
     Layout = "~/Views/Shared/_ContLayout.cshtml";
 }
 
 @section heading {
-    Predict result
+    Chẩn đoán hình ảnh
 }
-<h1>Predict</h1>
-<h2>Single File Upload</h2>
+<h3>Chọn file để upload</h3>
 <hr />
 <div class="row">
     <div class="col-md-12">
@@ -22,5 +22,31 @@
 </div>
 <hr />
 
-<h3>Predict result: </h3>
-@ViewBag.Result
+<h3>Kết quả chẩn đoán: </h3>
+@if (@ViewBag.Result != null)
+{
+    var pr = @ViewBag.Result as PredictResult;
+    <strong>
+        Label: @pr.Label
+    </strong>
+    <br />
+    <strong>
+        Score: @pr.Score
+    </strong>
+    <br />
+
+    if (pr.Label.Contains("porn"))
+    {
+        <strong>
+            Nội dung độc hại, bị nghiêm cấm.
+        </strong>
+
+    }
+    if (pr.Label.Contains("gore"))
+    {
+        <strong>
+            Nội dung độc hại, bị nghiêm cấm.
+        </strong>
+
+    }
+}

@@ -16,12 +16,12 @@ namespace ObSecureApp
         public class ModelInput
         {
             [LoadColumn(0)]
-            [ColumnName(@"Label")]
-            public string Label { get; set; }
+            [ColumnName(@"comment")]
+            public string Comment { get; set; }
 
             [LoadColumn(1)]
-            [ColumnName(@"ImageSource")]
-            public byte[] ImageSource { get; set; }
+            [ColumnName(@"label")]
+            public float Label { get; set; }
 
         }
 
@@ -33,14 +33,14 @@ namespace ObSecureApp
         #region model output class
         public class ModelOutput
         {
-            [ColumnName(@"Label")]
+            [ColumnName(@"comment")]
+            public string Comment { get; set; }
+
+            [ColumnName(@"label")]
             public uint Label { get; set; }
 
-            [ColumnName(@"ImageSource")]
-            public byte[] ImageSource { get; set; }
-
             [ColumnName(@"PredictedLabel")]
-            public string PredictedLabel { get; set; }
+            public float PredictedLabel { get; set; }
 
             [ColumnName(@"Score")]
             public float[] Score { get; set; }
@@ -57,6 +57,8 @@ namespace ObSecureApp
         private static PredictionEngine<ModelInput, ModelOutput> CreatePredictEngine()
         {
             var mlContext = new MLContext();
+            mlContext.GpuDeviceId = 0;
+            mlContext.FallbackToCpu = false;
             ITransformer mlModel = mlContext.Model.Load(MLNetModelPath, out var _);
             return mlContext.Model.CreatePredictionEngine<ModelInput, ModelOutput>(mlModel);
         }
@@ -68,8 +70,7 @@ namespace ObSecureApp
         /// <returns><seealso cref=" ModelOutput"/></returns>
         public static IOrderedEnumerable<KeyValuePair<string, float>> PredictAllLabels(ModelInput input)
         {
-            var predEngine = PredictEngine.Value;
-            var result = predEngine.Predict(input);
+            var result = Predict(input);
             return GetSortedScoresWithLabels(result);
         }
 
@@ -105,14 +106,14 @@ namespace ObSecureApp
         {
             var schema = PredictEngine.Value.OutputSchema;
 
-            var labelColumn = schema.GetColumnOrNull("Label");
+            var labelColumn = schema.GetColumnOrNull("label");
             if (labelColumn == null)
             {
-                throw new Exception("Label column not found. Make sure the name searched for matches the name in the schema.");
+                throw new Exception("label column not found. Make sure the name searched for matches the name in the schema.");
             }
 
             // Key values contains an ordered array of the possible labels. This allows us to map the results to the correct label value.
-            var keyNames = new VBuffer<ReadOnlyMemory<char>>();
+            var keyNames = new VBuffer<float>();
             labelColumn.Value.GetKeyValues(ref keyNames);
             return keyNames.DenseValues().Select(x => x.ToString());
         }
@@ -125,7 +126,15 @@ namespace ObSecureApp
         public static ModelOutput Predict(ModelInput input)
         {
             var predEngine = PredictEngine.Value;
-            return predEngine.Predict(input);
+            var output = predEngine.Predict(input);
+            var scores = output.Score;
+
+            // To get scores sum up to 1
+            var exp = scores.Select(x => (float)Math.Exp(x));
+            var softMaxScores = exp.Select(x => x / exp.Sum()).ToArray();
+            output.Score = softMaxScores;
+            return output;
+
         }
     }
 }

@@ -18,22 +18,17 @@
     <PackageReference Include="SciSharp.TensorFlow.Redist" Version="2.3.1" />
     <PackageReference Include="TorchSharp-cuda-windows" Version="0.101.5" />
   </ItemGroup>
-  <ItemGroup Label="ObSecureMLModel">
-    <None Include="ObSecureMLModel.mlnet">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
+  <ItemGroup>
+    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
   <ItemGroup Label="MLModel">
     <None Include="MLModel.mlnet">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-  <ItemGroup Label="ObSecureMLModel2">
-    <None Include="ObSecureMLModel2.mlnet">
+  <ItemGroup Label="ImgMLModel">
+    <None Include="ImgMLModel.mlnet">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
 </Project>

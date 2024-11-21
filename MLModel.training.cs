@@ -7,45 +7,66 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.ML;
 using Microsoft.ML.Data;
-using Microsoft.ML.Vision;
+using Microsoft.ML.TorchSharp;
+using Microsoft.ML.Trainers;
 
 namespace ObSecureApp
 {
     public partial class MLModel
     {
+        public const string RetrainFilePath =  @"C:\Users\khanh\source\repos\ObSecureApp\Data\HuanLuyenKHKT.csv";
+        public const char RetrainSeparatorChar = ';';
+        public const bool RetrainHasHeader =  true;
+        public const bool RetrainAllowQuoting =  false;
+
+         /// <summary>
+        /// Train a new model with the provided dataset.
+        /// </summary>
+        /// <param name="outputModelPath">File path for saving the model. Should be similar to "C:\YourPath\ModelName.mlnet"</param>
+        /// <param name="inputDataFilePath">Path to the data file for training.</param>
+        /// <param name="separatorChar">Separator character for delimited training file.</param>
+        /// <param name="hasHeader">Boolean if training file has a header.</param>
+        public static void Train(string outputModelPath, string inputDataFilePath = RetrainFilePath, char separatorChar = RetrainSeparatorChar, bool hasHeader = RetrainHasHeader, bool allowQuoting = RetrainAllowQuoting)
+        {
+            var mlContext = new MLContext();
+
+            var data = LoadIDataViewFromFile(mlContext, inputDataFilePath, separatorChar, hasHeader, allowQuoting);
+            var model = RetrainModel(mlContext, data);
+            SaveModel(mlContext, model, data, outputModelPath);
+        }
+
+        /// <summary>
+        /// Load an IDataView from a file path.
+        /// </summary>
+        /// <param name="mlContext">The common context for all ML.NET operations.</param>
+        /// <param name="inputDataFilePath">Path to the data file for training.</param>
+        /// <param name="separatorChar">Separator character for delimited training file.</param>
+        /// <param name="hasHeader">Boolean if training file has a header.</param>
+        /// <returns>IDataView with loaded training data.</returns>
+        public static IDataView LoadIDataViewFromFile(MLContext mlContext, string inputDataFilePath, char separatorChar, bool hasHeader, bool allowQuoting)
+        {
+            return mlContext.Data.LoadFromTextFile<ModelInput>(inputDataFilePath, separatorChar, hasHeader, allowQuoting: allowQuoting);
+        }
 
 
         /// <summary>
-        ///  Load an IDataView from a folder path.
+        /// Save a model at the specified path.
         /// </summary>
         /// <param name="mlContext">The common context for all ML.NET operations.</param>
-        /// <param name="folder"> Folder to the image data for training.</param>
-        public static IDataView LoadImageFromFolder(MLContext mlContext, string folder)
+        /// <param name="model">Model to save.</param>
+        /// <param name="data">IDataView used to train the model.</param>
+        /// <param name="modelSavePath">File path for saving the model. Should be similar to "C:\YourPath\ModelName.mlnet.</param>
+        public static void SaveModel(MLContext mlContext, ITransformer model, IDataView data, string modelSavePath)
         {
-            var res = new List<ModelInput>();
-            var allowedImageExtensions = new[] { ".png", ".jpg", ".jpeg", ".gif" };
-            DirectoryInfo rootDirectoryInfo = new DirectoryInfo(folder);
-            DirectoryInfo[] subDirectories = rootDirectoryInfo.GetDirectories();
+            // Pull the data schema from the IDataView used for training the model
+            DataViewSchema dataViewSchema = data.Schema;
 
-            if (subDirectories.Length == 0)
+            using (var fs = File.Create(modelSavePath))
             {
-                throw new Exception("fail to find subdirectories");
+                mlContext.Model.Save(model, dataViewSchema, fs);
             }
-            
-            foreach (DirectoryInfo directory in subDirectories)
-            {
-                var imageList = directory.EnumerateFiles().Where(f => allowedImageExtensions.Contains(f.Extension.ToLower()));
-                if (imageList.Count() > 0)
-                {
-                    res.AddRange(imageList.Select(i => new ModelInput 
-                    {
-                        Label = directory.Name,
-                         ImageSource = File.ReadAllBytes(i.FullName),
-                    }));
-                }
-            }
-            return mlContext.Data.LoadFromEnumerable(res);
         }
+
 
         /// <summary>
         /// Retrain model using the pipeline generated as part of the training process.
@@ -69,8 +90,8 @@ namespace ObSecureApp
         public static IEstimator<ITransformer> BuildPipeline(MLContext mlContext)
         {
             // Data process configuration with pipeline data transformations
-            var pipeline = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"Label",inputColumnName:@"Label",addKeyValueAnnotationsAsText:false)      
-                                    .Append(mlContext.MulticlassClassification.Trainers.ImageClassification(labelColumnName:@"Label",scoreColumnName:@"Score",featureColumnName:@"ImageSource"))      
+            var pipeline = mlContext.Transforms.Conversion.MapValueToKey(outputColumnName:@"label",inputColumnName:@"label",addKeyValueAnnotationsAsText:false)      
+                                    .Append(mlContext.MulticlassClassification.Trainers.TextClassification(labelColumnName: @"label", sentence1ColumnName: @"comment"))      
                                     .Append(mlContext.Transforms.Conversion.MapKeyToValue(outputColumnName:@"PredictedLabel",inputColumnName:@"PredictedLabel"));
 
             return pipeline;
