@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Templates.BlazorIdentity.Pages.Manage;
 using ObSecureApp.Models;
 using System.Diagnostics;
 using System.IO;
@@ -35,18 +36,34 @@ namespace ObSecureApp.Controllers
             return View();
         }
         [HttpPost]
-        public IActionResult Predict(string id)
+        public IActionResult Predict(string name, string email, string comment)
         {
 
-            //Load sample data
-            //var sampleData = new ObSecureMLModel.ModelInput()
-            //{
-            //    Comment = @"The other two films Hitch and Magnolia are also directly related to the community in question, and may be of interest to those who see those films.  So why not link to them?",
-            //};
+            var sampleData = new MLModel.ModelInput()
+            {
+                Comment = comment
+            };
 
-            ////Load model and predict output
-            //var result = ObSecureMLModel.Predict(sampleData);
-            //ViewBag.Result = result.PredictedLabel.ToString() + result.Label + result.Score.ToString();
+            //Load model and predict output
+            //var result = MLModel.Predict(sampleData);
+            PredictResult result = new PredictResult();
+
+            var sortedScoresWithLabel = MLModel.PredictAllLabels(sampleData);
+            //MLModel.ModelOutput sortedScoresWithLabel = MLModel.Predict(sampleData);
+        
+            foreach (var score in sortedScoresWithLabel)
+            {
+                if (score.Value >= 0.35)
+                {
+                    result.Score = score.Value;
+                    result.Label = score.Key;
+                }
+                break;
+            }
+                        
+            ViewBag.Label = result.Label;
+            ViewBag.Score = result.Score;
+
             return View();
         }
         [HttpGet]

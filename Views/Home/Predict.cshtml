@@ -5,7 +5,7 @@
 }
 
 @section heading{
-    Predict result
+    Chẩn đoán văn bản
 }
 
 @section commentForm{
@@ -13,7 +13,7 @@
     <section id="comment-form" class="comment-form section">
         <div class="container">
 
-            <form asp-action="comment" method="post" asp-controller="Home">
+           <form method="post" asp-controller="Home" asp-action="Predict">
 
                 <h4>Gửi ý kiến</h4>
                 <p>Các trường có dấu (*) là yêu cầu phải nhập.</p>
@@ -46,4 +46,20 @@
 <hr/>
 
 <h3>Kết quả chẩn đoán: </h3>
-@ViewBag.Result
+@if (@ViewBag.Label != null)
+{
+    <strong style="color:red;">
+        Label: Thông tin dung tục, bạo lực, ...
+    </strong>
+    <br />
+    <strong>
+        Score: @ViewBag.Score
+    </strong>
+    <br />
+}else
+{
+    <strong style="color:black;">
+        Dữ liệu an toàn.
+    </strong>
+   
+}
