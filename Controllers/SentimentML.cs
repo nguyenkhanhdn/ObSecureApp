@@ -5,6 +5,7 @@ namespace ObSecureApp.Controllers
 {
     public class SentimentML
     {
+        //Module huấn luyện mô hình
         public void TrainingModel()
         {
             var mlContext = new MLContext();
@@ -25,7 +26,7 @@ namespace ObSecureApp.Controllers
             var modelPath = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory,"models","model.zip"));
             mlContext.Model.Save(model, trainDataView.Schema, modelPath);
         }
-
+        //Chẩn đoán
         public SentimentPrediction Predict(string inputText)
         {
             var mlContext = new MLContext();
