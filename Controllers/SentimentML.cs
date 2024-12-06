@@ -17,6 +17,7 @@ namespace ObSecureApp.Controllers
 
             //Training the Model
             var data_file = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "data", "HuanLuyenKHKT.csv"));
+            //var data_file = Path.GetFullPath(Path.Combine(Environment.CurrentDirectory, "data", "final_adult_content_vi.txt"));
             var trainDataView = mlContext.Data.LoadFromTextFile<SentimentData>(data_file, separatorChar: ';', hasHeader: true);
             //var trainDataView = mlContext.Data.LoadFromEnumerable(trainingData); Load data from text
             var model = pipeline.Fit(trainDataView);

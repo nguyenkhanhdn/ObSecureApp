@@ -8,18 +8,21 @@
     Lọc nội dung văn bản
 }
 
-<h1>Lọc nội dung văn bản</h1>
 
 <hr />
 
 <div id="SentimentText">
-    <h3>@ViewBag.Label</h3>
-    <h3>@ViewBag.Probability</h3>
+    
     @if (ViewBag.Label)
     {
+        <h3>Chẩn đoán: Nội dung trang web không an toàn.</h3>
+        <br />
         <p style="color:red;"><strong>Nội dung thông tin vi phạm, bị ngăn cấm</strong></p>
     }else
     {
+        <h3>Chẩn đoán: Nội dung trang web an toàn</h3>
+        <p>Nội dung: </p>
+
         <p style="color:green;">@ViewBag.Text</p>
         
     }
