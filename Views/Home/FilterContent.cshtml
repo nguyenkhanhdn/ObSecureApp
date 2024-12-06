@@ -1,0 +1,32 @@
+﻿
+@{
+    ViewData["Title"] = "FilterContent";
+    Layout = "~/Views/Shared/_ContLayout.cshtml";
+}
+
+@section heading{
+    Lọc nội dung văn bản
+}
+
+<h1>Lọc nội dung văn bản</h1>
+
+<hr />
+
+<div id="SentimentText">
+    <h3>@ViewBag.Label</h3>
+    <h3>@ViewBag.Probability</h3>
+    @if (ViewBag.Label)
+    {
+        <p style="color:red;"><strong>Nội dung thông tin vi phạm, bị ngăn cấm</strong></p>
+    }else
+    {
+        <p style="color:green;">@ViewBag.Text</p>
+        
+    }
+</div>
+
+@section Scripts{
+    <script>
+        validateContent();
+    </script>
+}

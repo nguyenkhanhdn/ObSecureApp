@@ -1,4 +1,24 @@
-﻿// Please see documentation at https://learn.microsoft.com/aspnet/core/client-side/bundling-and-minification
-// for details on configuring this project to bundle and minify static web assets.
+﻿function validateContent() {
+    var textdata = document.getElementById('SentimentText').innerText;
+    var status = "";
+    var data = {
+        text: textdata
+    };
 
-// Write your JavaScript code.
+    $.ajax({
+        url: "/api/SentimentEngine?text='"+textdata + "'",
+        type: 'GET',
+        //data: JSON.stringify(textdata),
+        contentType: 'application/json; charset=utf-8',
+        success: function (data) {
+            alert(data);
+            status = data;
+            console.log(data);
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
+
+    return status;
+}
