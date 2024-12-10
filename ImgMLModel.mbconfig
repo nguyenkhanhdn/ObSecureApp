@@ -3,7 +3,7 @@
   "DataSource": {
     "Type": "Folder",
     "Version": 1,
-    "FolderPath": "D:\\Codes\\obsecure\\datasets\\image"
+    "FolderPath": "C:\\Users\\khanh\\source\\repos\\ObSecureApp\\wwwroot\\dataset"
   },
   "Environment": {
     "Type": "LocalCPU",
@@ -17,8 +17,8 @@
         "Version": 1,
         "Type": "Trial",
         "TrainerName": "ImageClassificationMulti",
-        "Score": 0.91776315789473684,
-        "RuntimeInSeconds": 470.592,
+        "Score": 0.91933815925542917,
+        "RuntimeInSeconds": 1438.925,
         "Parameter": {
           "_SCHEMA_": "e0 * e1 * e2",
           "e0": {

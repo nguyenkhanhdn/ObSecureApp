@@ -19,6 +19,7 @@
     <PackageReference Include="TorchSharp-cuda-windows" Version="0.101.5" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="wwwroot\dataset\" />
     <Folder Include="wwwroot\uploads\" />
   </ItemGroup>
   <ItemGroup Label="MLModel">
