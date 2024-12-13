@@ -38,18 +38,18 @@ namespace ObSecureApp.Controllers
             List<string> strings = new List<string>();
             strings.Add("main_frame");
 
-            Action action = new Action(type);
-            action.Type = type;
+            action act = new action(type);
+            act.type = type;
 
-            Condition condition = new Condition();
-            condition.urlFilter = url;
-            condition.resourceTypes = strings;
+            condition cond = new condition();
+            cond.urlFilter = url;
+            cond.resourceTypes = strings;
             
             RuleModel rule = new RuleModel();
-            rule.Id = id;
-            rule.Priority = priority;
-            rule.Action = action;
-            rule.Condition = condition;
+            rule.id = id;
+            rule.priority = priority;
+            rule.action = act;
+            rule.condition = cond;
 
             
             _repository.Create(rule);

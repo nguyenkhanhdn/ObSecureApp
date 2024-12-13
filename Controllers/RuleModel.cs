@@ -2,9 +2,9 @@
 {
     public class RuleModel
     {
-        public int Id { get; set; }
-        public int Priority { get; set; }
-        public Action Action { get; set; }
-        public Condition Condition { get; set; }
+        public int id { get; set; }
+        public int priority { get; set; }
+        public action action { get; set; }
+        public condition condition { get; set; }
     }
 }

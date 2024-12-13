@@ -7,8 +7,8 @@ namespace ObSecureApp.Controllers
     {
         //private readonly string _filePath = "rules.json";
 
-        private string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/json", "rules_1.json");
-
+        //private string _filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/json", "rules_1.json");
+        string _filePath = @"D:\khkt-tht-sft\2024-2025\Quang Khanh\NetGuard-chrome-extension\rules_1.json";
         public List<RuleModel> GetAll()
         {
             if (!File.Exists(_filePath))
@@ -25,13 +25,13 @@ namespace ObSecureApp.Controllers
         public RuleModel GetById(int id)
         {
             var rules = GetAll();
-            return rules.FirstOrDefault(r => r.Id == id);
+            return rules.FirstOrDefault(r => r.id == id);
         }
 
         public void Create(RuleModel rule)
         {
             var rules = GetAll();
-            rule.Id = rules.Any() ? rules.Max(r => r.Id) + 1 : 1;
+            rule.id = rules.Any() ? rules.Max(r => r.id) + 1 : 1;
             rules.Add(rule);
             SaveToFile(rules);
         }
@@ -39,7 +39,7 @@ namespace ObSecureApp.Controllers
         public void Update(RuleModel updatedRule)
         {
             var rules = GetAll();
-            var rule = rules.FirstOrDefault(r => r.Id == updatedRule.Id);
+            var rule = rules.FirstOrDefault(r => r.id == updatedRule.id);
             if (rule != null)
             {
                 rules.Remove(rule);
@@ -51,7 +51,7 @@ namespace ObSecureApp.Controllers
         public void Delete(int id)
         {
             var rules = GetAll();
-            var rule = rules.FirstOrDefault(r => r.Id == id);
+            var rule = rules.FirstOrDefault(r => r.id == id);
             if (rule != null)
             {
                 rules.Remove(rule);

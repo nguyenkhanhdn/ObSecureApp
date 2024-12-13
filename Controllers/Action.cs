@@ -1,11 +1,11 @@
 ﻿namespace ObSecureApp.Controllers
 {
-    public class Action
+    public class action
     {
-        public  string Type { get; set; }
-        public Action(string type)
+        public  string type { get; set; }
+        public action(string type)
         {
-            this.Type = type;
+            this.type = type;
         }
     }
 }

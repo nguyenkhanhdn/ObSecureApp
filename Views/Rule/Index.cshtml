@@ -19,14 +19,14 @@
     @foreach (var rule in Model)
     {
         <tr>
-            <td>@rule.Id</td>
-            <td>@rule.Priority</td>
-            <td>@rule.Action.Type</td>
-            <td>@rule.Condition.urlFilter</td>
+            <td>@rule.id</td>
+            <td>@rule.priority</td>
+            <td>@rule.action.type</td>
+            <td>@rule.condition.urlFilter</td>
             <td>
-                <a asp-action="Details" asp-route-id="@rule.Id">Details</a> |
+                <a asp-action="Details" asp-route-id="@rule.id">Details</a> |
                 @* <a asp-action="Edit" asp-route-id="@rule.Id">Edit</a> | *@
-                <a asp-action="Delete" asp-route-id="@rule.Id">Delete</a>
+                <a asp-action="Delete" asp-route-id="@rule.id">Delete</a>
             </td>
         </tr>
     }
