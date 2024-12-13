@@ -8,7 +8,7 @@
     Tạo thiết lập trang
 }
 <a asp-action="Create">Create New Rule</a>
-<table>
+<table class="table">
     <tr>
         <th>ID</th>
         <th>Priority</th>
@@ -25,7 +25,7 @@
             <td>@rule.Condition.urlFilter</td>
             <td>
                 <a asp-action="Details" asp-route-id="@rule.Id">Details</a> |
-                <a asp-action="Edit" asp-route-id="@rule.Id">Edit</a> |
+                @* <a asp-action="Edit" asp-route-id="@rule.Id">Edit</a> | *@
                 <a asp-action="Delete" asp-route-id="@rule.Id">Delete</a>
             </td>
         </tr>

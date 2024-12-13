@@ -1,0 +1,35 @@
+﻿@model ObSecureApp.Controllers.RuleModel
+
+@{
+    ViewData["Title"] = "Delete";
+    Layout = "~/Views/Shared/_ContLayout.cshtml";
+}
+
+@section heading {
+    <h1>Xóa thiết lập trang</h1>
+}
+
+<h3>Bạn chắc chắn xóa thiết lập trang này?</h3>
+<div>
+    <h4>Xóa thiết lập trang</h4>
+    <hr />
+    <dl class="row">
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Id)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Id)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Priority)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Priority)
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="submit" value="Delete" class="btn btn-danger" /> |
+        <a asp-action="Index">Back to List</a>
+    </form>
+</div>
