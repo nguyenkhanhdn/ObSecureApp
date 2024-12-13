@@ -1,0 +1,33 @@
+﻿@model List<ObSecureApp.Controllers.RuleModel>
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ContLayout.cshtml";
+}
+
+@section heading {
+    Tạo thiết lập trang
+}
+<a asp-action="Create">Create New Rule</a>
+<table>
+    <tr>
+        <th>ID</th>
+        <th>Priority</th>
+        <th>Action</th>
+        <th>Condition</th>
+        <th>Actions</th>
+    </tr>
+    @foreach (var rule in Model)
+    {
+        <tr>
+            <td>@rule.Id</td>
+            <td>@rule.Priority</td>
+            <td>@rule.Action.Type</td>
+            <td>@rule.Condition.urlFilter</td>
+            <td>
+                <a asp-action="Details" asp-route-id="@rule.Id">Details</a> |
+                <a asp-action="Edit" asp-route-id="@rule.Id">Edit</a> |
+                <a asp-action="Delete" asp-route-id="@rule.Id">Delete</a>
+            </td>
+        </tr>
+    }
+</table>
